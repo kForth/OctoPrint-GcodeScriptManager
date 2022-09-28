@@ -1,0 +1,18 @@
+<div data-bind="foreach: scripts">
+    <div class="row-fluid" data-bind="visible: $data.sidebarToggle">
+        <span class="span1 gcodescriptmanager-script-enable">
+            <input type="checkbox" title="{{ _('Enable Script') }}" data-bind="checked: $data.enabled">
+        </span>
+        <span class="span10 gcodescriptmanager-script-name" title="{{ _('Script Name') }}" data-bind="text: $data.name"></span>
+        <span class="span1 gcodescriptmanager-script-info">
+            <a class="text-info" href="javascript:void(0)" data-bind="
+                popover: { 
+                    placement: 'right',
+                    trigger: 'hover',
+                    html: true,
+                    title: function() { return $root.getPopoverTitle($data); },
+                    content: function() { return $root.getPopoverContent($data); },
+                }"><i class="fas fa-info-circle"></i></a>
+        </span>
+    </div>
+</div>

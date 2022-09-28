@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build less",
+      "type": "shell",
+      "command": "lessc --clean-css octoprint_gcodescriptmanager/static/less/gcodescriptmanager.less octoprint_gcodescriptmanager/static/css/gcodescriptmanager.css",
+      "problemMatcher": ["$lessc"]
+    }
+  ]
+}

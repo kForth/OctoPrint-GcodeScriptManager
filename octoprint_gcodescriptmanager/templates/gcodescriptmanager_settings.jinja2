@@ -1,0 +1,37 @@
+<h3>{{ _("GCODE Script Manager") }}</h3>
+<form class="form-horizontal" onsubmit="return false;">
+    <div class="row-fluid">
+        <div class="span2"><b>{{ _('Name') }}</b></div>
+        <div class="span2"><b>{{ _('Type') }}</b></div>
+        <div class="span2"><b>{{ _('When') }}</b></div>
+        <div class="span2"><b>{{ _('Script') }}</b></div>
+        <div class="span1 text-center"><b>{{ _('Enable') }}</b></div>
+        <div class="span1 text-center"><b>{{ _('Sidebar') }}</b></div>
+        <div class="span2 text-center"></div>
+    </div>
+    <div class="control-group" data-bind="foreach: scripts">
+        <div class="row-fluid">
+            <div class="span2"><input class="span12" type="text" data-bind="value: $data.name"></div>
+            <div class="span2"><select class="span12" data-bind="value: $data.type, options: $root.consts.typeOptions, optionsText: 'label', optionsValue: 'value'"></select></div>
+            <div class="span2"><select class="span12" data-bind="value: $data.when, options: $root.consts.whenOptions, optionsText: 'label', optionsValue: 'value'"></select></div>
+            <div class="span2"><textarea class="span12" rows="1" class="block monospace" data-bind="value: $data.script"></textarea></div>
+            <div class="span1 text-center"><input type="checkbox" data-bind="checked: $data.enabled"></div>
+            <div class="span1 text-center"><input type="checkbox" data-bind="checked: $data.sidebarToggle"></div>
+            <div class="span2 text-center">
+                <div class="input-append input-prepend span8">
+                    <button type="button" title="Move Up" class="btn btn-mini btn-primary span6" data-bind="click: function() { $root.moveScriptUp($data); }, enable: $root.canMoveUp($data)"><i class="fas fa-chevron-up"></i></button>
+                    <button type="button" title="Move Down" class="btn btn-mini btn-primary span6" data-bind="click: function() { $root.moveScriptDown($data); }, enable: $root.canMoveDown($data)"><i class="fas fa-chevron-down"></i></button>
+                </div>
+                <button type="button" title="Delete Script" class="btn btn-mini btn-danger span4" data-bind="click: function() { $root.removeScript($data); }">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <span class="help-block span10">
+            {{ _('Anything you put here will be executed <em>after</em> any lines in your files.') }}
+        </span>
+        <button type="button" title="Add Script" class="btn btn-success span2" data-bind="click: function() { $root.addScript(); }"><i class="fas fa-plus"></i></button>
+    </div>
+</form>
