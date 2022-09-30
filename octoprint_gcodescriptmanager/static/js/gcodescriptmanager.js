@@ -13,6 +13,9 @@ $(function () {
         self.consts = {};
         self.scripts = ko.observableArray([]);
 
+        self.editDialog = $("#dialog_gcodescriptmanager_editscript");
+        self.editTarget = ko.observable(undefined);
+
         self.onBeforeBinding = function () {
             self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
             self.consts = ko.mapping.toJS(self._settings.consts);
@@ -43,6 +46,30 @@ $(function () {
         self.removeScript = function (script) {
             let index = self.scripts().indexOf(script);
             self.scripts.splice(index, 1);
+        };
+
+        
+        self.duplicateScript = function (script) {
+            let duplicate = $.extend({}, script);
+            self.scripts.push(duplicate);
+            self.editScript(duplicate);
+        };
+
+        self.editScript = function (script) {
+            self.editTarget = {
+                script: {};
+            }
+            let duplicate = $.extend({}, script);
+            self.editTarget(duplicate);
+            self.editDialog.modal("show");
+        };
+        
+        self.isEditFormValid = function (script) {
+            return true;
+        };
+        
+        self.saveEditScript = function (script) {
+            self.scripts.splice(self.editTarget.index, 1, self.editTarget.script);
         };
 
         self.canMoveUp = function (script) {
@@ -102,7 +129,7 @@ $(function () {
         elements: [
             "#settings_plugin_gcodescriptmanager",
             "#sidebar_plugin_gcodescriptmanager",
-            "#tab_plugin_gcodescriptmanager"
+            "#tab_plugin_gcodescriptmanager",
         ]
     });
 });

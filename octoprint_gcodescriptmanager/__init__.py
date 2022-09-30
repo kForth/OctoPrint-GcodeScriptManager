@@ -41,6 +41,14 @@ class GcodeScriptManagerPlugin(
                     "script": "M81",
                     "enabled": False,
                     "sidebarToggle": True,
+                },
+                {
+                    "name": "Keep Chamber Warm",
+                    "type": TYPE.AFTER_PRINT_DONE,
+                    "when": WHEN.AFTER_DEFAULT,
+                    "script": "M141 S45",
+                    "enabled": False,
+                    "sidebarToggle": True,
                 }
             ],
         }
@@ -73,7 +81,7 @@ class GcodeScriptManagerPlugin(
         return [
             {
                 "type": "settings",
-                "name": "GcodeScriptManager Plugin",
+                "name": "GCODE Script Manager",
                 "template": "gcodescriptmanager_settings.jinja2",
                 "custom_bindings": True,
             },
@@ -83,6 +91,12 @@ class GcodeScriptManagerPlugin(
                 "template": "gcodescriptmanager_sidebar.jinja2",
                 "custom_bindings": True,
                 "icon": "fas fa-scroll",
+            },
+            {
+                "type": "tab",
+                "name": "GCODE Scripts",
+                "template": "gcodescriptmanager_tab.jinja2",
+                "custom_bindings": True,
             },
         ]
 

@@ -1,0 +1,57 @@
+<div id="dialog_gcodescriptmanager_editscript" class="modal fade large modal-wide">
+    <div class="modal-header">
+        <h4 class="modal-title"></h4>
+    </div>
+
+    <div class="modal-body hack-flowbreak">
+        <form class="form-horizontal" id="spool-form">
+            <div class="row-fluid">
+                <div class="span2"><input class="span12" type="text" data-bind="value: editTarget.name"></div>
+                <div class="span2"><select class="span12"
+                        data-bind="value: editTarget.type, options: $root.consts.typeOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                </div>
+                <div class="span2"><select class="span12"
+                        data-bind="value: editTarget.when, options: $root.consts.whenOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                </div>
+                <div class="span2"><textarea class="span12" rows="1" class="block monospace"
+                        data-bind="value: editTarget.script"></textarea></div>
+                <div class="span1 text-center"><input type="checkbox" data-bind="checked: editTarget.enabled"></div>
+                <div class="span1 text-center"><input type="checkbox" data-bind="checked: editTarget.sidebarToggle">
+                </div>
+                <div class="span2 text-center">
+                    <div class="input-append input-prepend span8">
+                        <button type="button" title="Move Up" class="btn btn-mini btn-primary span6"
+                            data-bind="click: function() { $root.moveScriptUp(editTarget); }, enable: $root.canMoveUp(editTarget)"><i
+                                class="fas fa-chevron-up"></i></button>
+                        <button type="button" title="Move Down" class="btn btn-mini btn-primary span6"
+                            data-bind="click: function() { $root.moveScriptDown(editTarget); }, enable: $root.canMoveDown(editTarget)"><i
+                                class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <button type="button" title="Delete Script" class="btn btn-mini btn-danger span4"
+                        data-bind="click: function() { $root.removeScript(editTarget); }">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="control-group">
+            <div class="controls row-fluid">
+                <span class="span8" style="text-align:left">
+                    <button type="button" class="btn btn-danger"
+                        data-bind="visible: true, click: $root.removeScript(editTarget)">Delete</button>
+
+                    <button type="button" class="btn btn-warning"
+                        data-bind="visible: true, click: $root.duplicateScript(editTarget)">Copy</button>
+                </span>
+                <span class="span4 text-right">
+                    <button class="btn " data-dismiss="modal" style="text-align:right">Close</button>
+                    <button class="btn btn-primary"
+                        data-bind="enable: $root.isEditFormValid, click: $root.saveEditScript"
+                        style="text-align:right">Save</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
