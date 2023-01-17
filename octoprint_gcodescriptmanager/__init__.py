@@ -41,6 +41,14 @@ class GcodeScriptManagerPlugin(
                     "script": "M81",
                     "enabled": False,
                     "sidebarToggle": True,
+                },
+                {
+                    "name": "Keep Chamber Warm",
+                    "type": TYPE.AFTER_PRINT_DONE,
+                    "when": WHEN.AFTER_DEFAULT,
+                    "script": "M141 S45",
+                    "enabled": False,
+                    "sidebarToggle": True,
                 }
             ],
         }
@@ -73,7 +81,7 @@ class GcodeScriptManagerPlugin(
         return [
             {
                 "type": "settings",
-                "name": "GcodeScriptManager Plugin",
+                "name": "GCODE Script Manager",
                 "template": "gcodescriptmanager_settings.jinja2",
                 "custom_bindings": True,
             },
@@ -81,6 +89,13 @@ class GcodeScriptManagerPlugin(
                 "type": "sidebar",
                 "name": "GCODE Scripts",
                 "template": "gcodescriptmanager_sidebar.jinja2",
+                "custom_bindings": True,
+                "icon": "fas fa-scroll",
+            },
+            {
+                "type": "tab",
+                "name": "GCODE Scripts",
+                "template": "gcodescriptmanager_tab.jinja2",
                 "custom_bindings": True,
                 "icon": "fas fa-scroll",
             },
@@ -119,7 +134,7 @@ class GcodeScriptManagerPlugin(
         # for details.
         return {
             "gcodescriptmanager": {
-                "displayName": "GcodeScriptManager Plugin",
+                "displayName": "GCODE Script Manager",
                 "displayVersion": self._plugin_version,
                 # version check: github repository
                 "type": "github_release",
@@ -132,15 +147,8 @@ class GcodeScriptManagerPlugin(
         }
 
 
-# If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
-# ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
-# can be overwritten via __plugin_xyz__ control properties. See the documentation for that.
-__plugin_name__ = "GcodeScriptManager Plugin"
+__plugin_name__ = "GCODE Script Manager"
 
-
-# Set the Python version your plugin is compatible with below. Recommended is Python 3 only for all new plugins.
-# OctoPrint 1.4.0 - 1.7.x run under both Python 3 and the end-of-life Python 2.
-# OctoPrint 1.8.0 onwards only supports Python 3.
 __plugin_pythoncompat__ = ">=3,<4"  # Only Python 3
 
 

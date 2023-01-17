@@ -3,14 +3,20 @@
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": ["--config", "black.toml"],
   "editor.formatOnSave": true,
-  "python.sortImports.args": ["--profile=black"],
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
   },
+  "isort.args": ["--profile=black"],
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
-  "esbonio.sphinx.confDir": ""
+  "esbonio.sphinx.confDir": "",
+  "[jinja-html]": {
+    "editor.formatOnSave": false
+  },
+  "[html]": {
+    "editor.formatOnSave": false
+  }
 }

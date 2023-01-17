@@ -1,7 +1,18 @@
-#settings_plugin_gcodescriptmanager {
-  .control-group > .row-fluid {
-    & + * {
-      margin-top: 5px;
+#settings_plugin_gcodescriptmanager, #tab_plugin_gcodescriptmanager {
+  table {
+    tbody, thead {
+      tr {
+        th, td {
+          white-space: nowrap;
+          
+          &.min-content {
+            width: min-content;
+          }
+          &.max-content {
+            width: max-content;
+          }
+        }
+      }
     }
   }
 

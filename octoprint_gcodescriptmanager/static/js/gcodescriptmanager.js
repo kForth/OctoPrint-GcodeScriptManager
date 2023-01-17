@@ -13,6 +13,10 @@ $(function () {
         self.consts = {};
         self.scripts = ko.observableArray([]);
 
+        self.editDialog = $("#dialog_gcodescriptmanager_editscript");
+        self.editTarget = ko.observable(undefined);
+        self.tempScript = ko.observable(undefined);
+
         self.onBeforeBinding = function () {
             self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
             self.consts = ko.mapping.toJS(self._settings.consts);
@@ -31,7 +35,7 @@ $(function () {
             self.scripts.push(
                 ko.mapping.fromJS({
                     name: self.getNewScriptName(),
-                    type: "",
+                    type: "afterPrintDone",
                     when: "afterDefaultScript",
                     script: "",
                     enabled: false,
@@ -45,6 +49,30 @@ $(function () {
             self.scripts.splice(index, 1);
         };
 
+        self.duplicateScript = function (script) {
+            let duplicate = $.extend({}, script);
+            self.scripts.push(duplicate);
+            self.editScript(duplicate);
+        };
+
+        self.editScript = function (script) {
+            self.editTarget(script.index);
+            self.tempScript(script);
+            self.editDialog.modal("show");
+        };
+
+        self.nameInvalid = function () {
+            return !!tempScript.name();
+        };
+
+        self.isEditFormValid = function (script) {
+            return true;
+        };
+
+        self.saveEditScript = function (script) {
+            self.scripts.splice(self.editTarget.index, 1, self.editTarget.script);
+        };
+
         self.canMoveUp = function (script) {
             let index = self.scripts().indexOf(script);
             return index > 0;
@@ -56,18 +84,18 @@ $(function () {
         };
 
         self.moveScriptUp = function (script) {
-            let index = self.scripts().indexOf(script);
-            if (self.canMoveUp(script)) {
-                self.removeScript(script);
-                self.scripts.splice(index - 1, 0, script);
-            }
+            self._moveScript(script, -1);
         };
 
         self.moveScriptDown = function (script) {
+            self._moveScript(script, 1);
+        };
+
+        self._moveScript = function (script, distance) {
             let index = self.scripts().indexOf(script);
             if (self.canMoveDown(script)) {
                 self.removeScript(script);
-                self.scripts.splice(index + 1, 0, script);
+                self.scripts.splice(index + distance, 0, script);
             }
         };
 
@@ -83,16 +111,16 @@ $(function () {
             return name;
         };
 
-        self.getPopoverTitle = function(script) {
-            return '<b>' + script.name() + '</b>';
+        self.getPopoverTitle = function (script) {
+            return "<b>" + script.name() + "</b>";
         };
 
-        self.getPopoverContent = function(script) {
+        self.getPopoverContent = function (script) {
             return [
-                '<b>' + gettext('Type') + ':</b> ' + _.startCase(script.type()),
-                '<b>' + gettext('When') + ':</b> ' + _.startCase(script.when()),
-                '<b>' + gettext('Script') + ':</b><pre>' + script.script() + '</pre>',
-            ].join('<br>');
+                "<b>" + gettext("Type") + ":</b> " + _.startCase(script.type()),
+                "<b>" + gettext("When") + ":</b> " + _.startCase(script.when()),
+                "<b>" + gettext("Script") + ":</b><pre>" + script.script() + "</pre>"
+            ].join("<br>");
         };
     }
 
