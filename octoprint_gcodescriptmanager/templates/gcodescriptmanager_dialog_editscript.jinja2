@@ -9,11 +9,14 @@
 
     <div class="modal-body">
         <form class="form-horizontal" onsubmit="return false;">
-            <div class="control-group" data-bind="css: {error: $root.editScript_nameInvalid()}">
+            <div class="control-group" data-bind="css: {error: $root.editDialog_nameInvalid()}">
                 <label class="control-label">{{ _('Name') }}</label>
                 <div class="controls">
                     <input type="text" data-bind="value: $root.tempScript.name">
-                    <span data-bind="visible: $root.editScript_nameInvalid()"><br><span class="help-inline">{{ _('Name must be set') }}</span>
+                    <span data-bind="visible: $root.editDialog_nameInvalid()">
+                        <span class="help-block" data-bind="visible: $root.editDialog_nameInvalid_empty()">{{ _('Name must be set') }}</span>
+                        <span class="help-block" data-bind="visible: $root.editDialog_nameInvalid_duplicate()">{{ _('Name must be unique') }}</span>
+                    </span>
                 </div>
             </div>
             <div class="control-group">
@@ -52,14 +55,28 @@
         <div class="control-group">
             <div class="controls row-fluid">
                 <span class="span8" style="text-align:left">
-                    <button type="button" class="btn btn-danger" data-bind="visible: $root.editDialog_isEditMode, click: $root.editScript_remove">Delete</button>
-                    <button type="button" class="btn btn-warning" data-bind="visible: $root.editDialog_isEditMode, click: $root.editScript_duplicate">Duplicate</button>
+                    <button type="button" class="btn btn-danger" data-bind="visible: $root.editDialog_isEditMode, click: $root.editDialog_confirmRemove">Delete</button>
+                    <button type="button" class="btn btn-warning" data-bind="visible: $root.editDialog_isEditMode, click: $root.editDialog_duplicate">Duplicate</button>
                 </span>
                 <span class="span4 text-right">
                     <button class="btn" data-dismiss="modal" style="text-align:right">{{ _('Cancel') }}</button>
-                    <button class="btn btn-primary" data-bind="disable: $root.editScript_formInvalid, click: $root.editScript_save" style="text-align:right">Save</button>
+                    <button class="btn btn-primary" data-bind="disable: $root.editDialog_formInvalid, click: $root.editDialog_save" style="text-align:right">Save</button>
                 </span>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="dialog_gcodescriptmanager_confirmremove" class="modal hide fade-in">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>{{ _('Delete GCODE Script') }}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{{ _('Are you sure you want to delete this GCODE script? This cannot be undone!') }}</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        <a href="#" class="btn btn-danger" data-bind="click: $root.editDialog_remove">Delete</a>
     </div>
 </div>

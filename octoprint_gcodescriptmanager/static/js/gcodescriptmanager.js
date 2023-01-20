@@ -14,6 +14,7 @@ $(function () {
         self.scripts = ko.observableArray([]);
 
         self.editDialog = $("#dialog_gcodescriptmanager_editscript");
+        self.confirmDeleteDialog = $("#dialog_gcodescriptmanager_confirmremove");
         self.editIndex = ko.observable(-1);
         self.tempScript = ko.mapping.fromJS({
             name: undefined,
@@ -118,7 +119,7 @@ $(function () {
             self.editDialog.modal("show");
         };
 
-        self.editScript_save = function () {
+        self.editDialog_save = function () {
             if (self.editIndex() < 0) {
                 self.scripts.push(ko.mapping.fromJS(ko.mapping.toJS(self.tempScript)));
             } else {
@@ -130,15 +131,18 @@ $(function () {
             self.editDialog.modal("hide");
         };
 
-        self.editScript_remove = function () {
-            // TODO: Better confirm dialog
-            if (!confirm("Are you sure you want to delete this script?")) return;
+        self.editDialog_confirmRemove = function () {
+            self.confirmDeleteDialog.modal("show");
+        };
+
+        self.editDialog_remove = function () {
             self.scripts.splice(self.editIndex(), 1);
             self.saveSettings();
+            self.confirmDeleteDialog.modal("hide");
             self.editDialog.modal("hide");
         };
 
-        self.editScript_duplicate = function () {
+        self.editDialog_duplicate = function () {
             let script = ko.mapping.fromJS(ko.mapping.toJS(self.tempScript));
             script.name(self._getNewScriptName(script.name()));
             self.editScript(script);
@@ -152,12 +156,28 @@ $(function () {
             return !self.editDialog_isEditMode();
         });
 
-        self.editScript_nameInvalid = ko.pureComputed(function () {
+        self.editDialog_nameInvalid_empty = ko.pureComputed(function () {
             return !self.tempScript.name();
         });
 
-        self.editScript_formInvalid = ko.pureComputed(function () {
-            return self.editScript_nameInvalid();
+        self.editDialog_nameInvalid_duplicate = ko.pureComputed(function () {
+            const scriptName = self.tempScript.name();
+            for (let i = 0; i < self.scripts().length; i++) {
+                if (i == self.editIndex()) continue;
+                if (self.scripts()[i].name() === scriptName) return true;
+            }
+            return false;
+        });
+
+        self.editDialog_nameInvalid = ko.pureComputed(function () {
+            return (
+                self.editDialog_nameInvalid_empty() ||
+                self.editDialog_nameInvalid_duplicate()
+            );
+        });
+
+        self.editDialog_formInvalid = ko.pureComputed(function () {
+            return self.editDialog_nameInvalid();
         });
 
         self.getPopoverTitle = function (script) {
