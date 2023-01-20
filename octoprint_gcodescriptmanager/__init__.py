@@ -115,7 +115,7 @@ class GcodeScriptManagerPlugin(
 
         prefix, suffix = "", ""
         for script in self._scripts:
-            if script["type"] == script_name:
+            if script["type"] == script_name and script["enabled"]:
                 self._logger.info(
                     "Adding Gcode Script '%(name)s' on '%(type)s', '%(when)s'", script
                 )
