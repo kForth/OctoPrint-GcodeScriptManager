@@ -172,6 +172,10 @@ $(function () {
             return !self.editDialog_isEditMode();
         });
 
+        self.editDialog_scriptWarning_empty = ko.pureComputed(function () {
+            return !self.tempScript.script();
+        });
+
         self.editDialog_nameInvalid_empty = ko.pureComputed(function () {
             return !self.tempScript.name();
         });

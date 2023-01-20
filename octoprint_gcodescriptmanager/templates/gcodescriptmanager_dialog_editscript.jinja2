@@ -43,10 +43,11 @@
                     <input type="checkbox" data-bind="checked: $root.tempScript.sidebarToggle">
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group" data-bind="css: {warning: $root.editDialog_scriptWarning_empty()}">
                 <label class="control-label">{{ _('Script') }}</label>
                 <div class="controls">
                     <textarea rows="4" class="block monospace" data-bind="value: $root.tempScript.script"></textarea>
+                    <span class="help-block" data-bind="visible: $root.editDialog_scriptWarning_empty()">{{ _('Script shouldn\'t be empty') }}</span>
                 </div>
             </div>
         </form>
