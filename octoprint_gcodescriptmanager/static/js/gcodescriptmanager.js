@@ -25,9 +25,21 @@ $(function () {
         });
 
         self.onBeforeBinding = function () {
-            self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
-            self.consts = ko.mapping.toJS(self._settings.consts);
-            self.scripts(self._settings.scripts());
+            let settings = self.settingsView.settings.plugins.gcodescriptmanager;
+            self.consts = ko.mapping.toJS(settings.consts);
+            self.scripts(settings.scripts());
+
+            self.typeMap = Object.fromEntries(
+                _.map(self.consts.typeOptions, function (e) {
+                    return [e.value, e.label];
+                })
+            );
+            self.whenMap = Object.fromEntries(
+                _.map(self.consts.whenOptions, function (e) {
+                    return [e.value, e.label];
+                })
+            );
+            console.log(self.typeMap);
         };
 
         self.saveSettings = function () {

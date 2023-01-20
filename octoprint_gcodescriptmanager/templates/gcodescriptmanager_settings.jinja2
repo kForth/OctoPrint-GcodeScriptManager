@@ -10,7 +10,7 @@
         <div class="row-fluid">
             <div class="span1 text-center"><input type="checkbox" data-bind="checked: $data.enabled"></div>
             <div class="span5" data-bind="text: $data.name"></div>
-            <div class="span4" data-bind="text: $data.type"></div>
+            <div class="span4" data-bind="text: $root.typeMap[$data.type()]"></div>
             <div class="span2 text-right">
                 <div class="btn-group">
                     <button type="button" title="Move Up" class="btn btn-mini btn-grey" data-bind="click: function() { $root.moveScriptUp($data); }, enable: $root.canMoveUp($data)"><i class="fas fa-chevron-up"></i></button>
