@@ -1,46 +1,49 @@
 <div id="dialog_gcodescriptmanager_editscript" class="modal hide fade-in">
     <div class="modal-header">
         <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-        <h4 class="modal-title">Edit GCODE Script</h4>
+        <h4 class="modal-title">
+            <span data-bind="visible: $root.editDialog_isEditMode">{{ _('Edit GCODE Script') }}</span>
+            <span data-bind="visible: $root.editDialog_isAddMode">{{ _('New GCODE Script') }}</span>
+        </h4>
     </div>
 
     <div class="modal-body">
         <form class="form-horizontal" onsubmit="return false;">
-            <div class="control-group" data-bind="css: {error: $root.nameInvalid()}">
+            <div class="control-group" data-bind="css: {error: $root.editScript_nameInvalid()}">
                 <label class="control-label">{{ _('Name') }}</label>
                 <div class="controls">
-                    <input type="text" data-bind="value: tempScript.name">
-                    <span data-bind="visible: $root.nameInvalid()"><br><span class="help-inline">{{ _('Name must be set') }}</span>
+                    <input type="text" data-bind="value: $root.tempScript.name">
+                    <span data-bind="visible: $root.editScript_nameInvalid()"><br><span class="help-inline">{{ _('Name must be set') }}</span>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">{{ _('Script Type') }}</label>
                 <div class="controls">
-                    <select data-bind="value: tempScript.type, options: $root.consts.typeOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                    <select data-bind="value: $root.tempScript.type, options: $root.consts.typeOptions, optionsText: 'label', optionsValue: 'value'"></select>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">{{ _('Script Timing') }}</label>
                 <div class="controls">
-                    <select data-bind="value: tempScript.when, options: $root.consts.whenOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                    <select data-bind="value: $root.tempScript.when, options: $root.consts.whenOptions, optionsText: 'label', optionsValue: 'value'"></select>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">{{ _('Enable Script') }}</label>
                 <div class="controls">
-                    <input type="checkbox" data-bind="checked: tempScript.enabled">
+                    <input type="checkbox" data-bind="checked: $root.tempScript.enabled">
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">{{ _('Show in Sidebar') }}</label>
                 <div class="controls">
-                    <input type="checkbox" data-bind="checked: tempScript.sidebarToggle">
+                    <input type="checkbox" data-bind="checked: $root.tempScript.sidebarToggle">
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">{{ _('Script') }}</label>
                 <div class="controls">
-                    <textarea rows="4" class="block monospace" data-bind="value: tempScript.script"></textarea>
+                    <textarea rows="4" class="block monospace" data-bind="value: $root.tempScript.script"></textarea>
                 </div>
             </div>
         </form>
@@ -49,12 +52,12 @@
         <div class="control-group">
             <div class="controls row-fluid">
                 <span class="span8" style="text-align:left">
-                    <button type="button" class="btn btn-danger" data-bind="visible: true, click: $root.removeScript(tempScript)">Delete</button>
-                    <button type="button" class="btn btn-warning" data-bind="visible: true, click: $root.duplicateScript(tempScript)">Duplicate</button>
+                    <button type="button" class="btn btn-danger" data-bind="visible: $root.editDialog_isEditMode, click: $root.editScript_remove">Delete</button>
+                    <button type="button" class="btn btn-warning" data-bind="visible: $root.editDialog_isEditMode, click: $root.editScript_duplicate">Duplicate</button>
                 </span>
                 <span class="span4 text-right">
-                    <button class="btn " data-dismiss="modal" style="text-align:right">Close</button>
-                    <button class="btn btn-primary" data-bind="enable: $root.isEditFormValid, click: $root.saveEditScript" style="text-align:right">Save</button>
+                    <button class="btn" data-dismiss="modal" style="text-align:right">{{ _('Cancel') }}</button>
+                    <button class="btn btn-primary" data-bind="disable: $root.editScript_formInvalid, click: $root.editScript_save" style="text-align:right">Save</button>
                 </span>
             </div>
         </div>

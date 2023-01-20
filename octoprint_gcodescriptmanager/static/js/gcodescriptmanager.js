@@ -14,63 +14,63 @@ $(function () {
         self.scripts = ko.observableArray([]);
 
         self.editDialog = $("#dialog_gcodescriptmanager_editscript");
-        self.editTarget = ko.observable(undefined);
-        self.tempScript = ko.observable(undefined);
+        self.editIndex = ko.observable(-1);
+        self.tempScript = ko.mapping.fromJS({
+            name: undefined,
+            type: undefined,
+            when: undefined,
+            script: undefined,
+            enabled: undefined,
+            sidebarToggle: undefined
+        });
 
         self.onBeforeBinding = function () {
             self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
             self.consts = ko.mapping.toJS(self._settings.consts);
-            self._updateSettings(self._settings, self);
+            self.scripts(self._settings.scripts());
         };
 
-        self.onSettingsBeforeSave = function () {
-            self._updateSettings(self, self._settings);
+        self.saveSettings = function () {
+            OctoPrint.settings.save({
+                plugins: {
+                    gcodescriptmanager: {
+                        scripts: ko.mapping.toJS(self.scripts)
+                    }
+                }
+            });
         };
 
-        self._updateSettings = function (source, target) {
-            target.scripts(source.scripts());
+        self._getNewScriptName = function (base) {
+            let i = 0;
+            if (base) {
+                let match = /^(.*)\s+\((\d+)\)$/.exec(base);
+                if (match) {
+                    base = match[1];
+                    i = parseInt(match[2]);
+                }
+            } else {
+                base = gettext("New Script");
+            }
+            const names = _.map(self.scripts(), function (s) {
+                return s.name();
+            });
+            let name = base;
+            while (_.includes(names, name)) {
+                name = _.sprintf("%(base)s (%(i)d)", {base, i: ++i});
+            }
+            return name;
         };
 
         self.addScript = function () {
-            self.scripts.push(
-                ko.mapping.fromJS({
-                    name: self.getNewScriptName(),
-                    type: "afterPrintDone",
-                    when: "afterDefaultScript",
-                    script: "",
-                    enabled: false,
-                    sidebarToggle: false
-                })
-            );
-        };
-
-        self.removeScript = function (script) {
-            let index = self.scripts().indexOf(script);
-            self.scripts.splice(index, 1);
-        };
-
-        self.duplicateScript = function (script) {
-            let duplicate = $.extend({}, script);
-            self.scripts.push(duplicate);
-            self.editScript(duplicate);
-        };
-
-        self.editScript = function (script) {
-            self.editTarget(script.index);
-            self.tempScript(script);
-            self.editDialog.modal("show");
-        };
-
-        self.nameInvalid = function () {
-            return !!tempScript.name();
-        };
-
-        self.isEditFormValid = function (script) {
-            return true;
-        };
-
-        self.saveEditScript = function (script) {
-            self.scripts.splice(self.editTarget.index, 1, self.editTarget.script);
+            let script = ko.mapping.fromJS({
+                name: self._getNewScriptName(),
+                type: "afterPrintDone",
+                when: "afterDefaultScript",
+                script: "",
+                enabled: false,
+                sidebarToggle: false
+            });
+            self.editScript(script);
         };
 
         self.canMoveUp = function (script) {
@@ -84,32 +84,69 @@ $(function () {
         };
 
         self.moveScriptUp = function (script) {
-            self._moveScript(script, -1);
+            if (self.canMoveUp(script)) self._moveScript(script, -1);
         };
 
         self.moveScriptDown = function (script) {
-            self._moveScript(script, 1);
+            if (self.canMoveDown(script)) self._moveScript(script, 1);
         };
 
         self._moveScript = function (script, distance) {
             let index = self.scripts().indexOf(script);
-            if (self.canMoveDown(script)) {
-                self.removeScript(script);
-                self.scripts.splice(index + distance, 0, script);
-            }
+            self.scripts.splice(index, 1);
+            self.scripts.splice(index + distance, 0, script);
+            self.saveSettings();
         };
 
-        self.getNewScriptName = function () {
-            let names = _.map(self.scripts(), function (s) {
-                return s.name();
+        self.editScript = function (script) {
+            self.editIndex(self.scripts().indexOf(script));
+            _.forEach(_.pairs(ko.mapping.fromJS(script)), function ([k, v]) {
+                if (typeof v === "function") self.tempScript[k](v());
             });
-            let name = gettext("New Script");
-            let i = 0;
-            while (_.includes(names, name)) {
-                name = gettext("New Script") + " " + ++i;
-            }
-            return name;
+            self.editDialog.modal("show");
         };
+
+        self.editScript_save = function () {
+            if (self.editIndex() < 0) {
+                self.scripts.push(ko.mapping.fromJS(ko.mapping.toJS(self.tempScript)));
+            } else {
+                _.forEach(_.pairs(ko.mapping.toJS(self.tempScript)), function ([k, v]) {
+                    self.scripts()[self.editIndex()][k](v);
+                });
+            }
+            self.saveSettings();
+            self.editDialog.modal("hide");
+        };
+
+        self.editScript_remove = function () {
+            // TODO: Better confirm dialog
+            if (!confirm("Are you sure you want to delete this script?")) return;
+            self.scripts.splice(self.editIndex(), 1);
+            self.saveSettings();
+            self.editDialog.modal("hide");
+        };
+
+        self.editScript_duplicate = function () {
+            let script = ko.mapping.fromJS(ko.mapping.toJS(self.tempScript));
+            script.name(self._getNewScriptName(script.name()));
+            self.editScript(script);
+        };
+
+        self.editDialog_isEditMode = ko.pureComputed(function () {
+            return self.editIndex() >= 0;
+        });
+
+        self.editDialog_isAddMode = ko.pureComputed(function () {
+            return !self.editDialog_isEditMode();
+        });
+
+        self.editScript_nameInvalid = ko.pureComputed(function () {
+            return !self.tempScript.name();
+        });
+
+        self.editScript_formInvalid = ko.pureComputed(function () {
+            return self.editScript_nameInvalid();
+        });
 
         self.getPopoverTitle = function (script) {
             return "<b>" + script.name() + "</b>";
