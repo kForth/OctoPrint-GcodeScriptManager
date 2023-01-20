@@ -124,7 +124,6 @@ $(function () {
             let index = self.scripts().indexOf(script);
             self.scripts.splice(index, 1);
             self.scripts.splice(index + distance, 0, script);
-            self.saveSettings();
         };
 
         self.editScript = function (script) {
