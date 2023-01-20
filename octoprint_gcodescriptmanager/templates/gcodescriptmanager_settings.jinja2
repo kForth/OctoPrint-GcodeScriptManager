@@ -1,14 +1,12 @@
 <h3>{{ _("GCODE Script Manager") }}</h3>
 <form class="form-horizontal" onsubmit="return false;">
     <div class="row-fluid">
-        <div class="span1 text-center"><i class="fas fa-toggle-on"></i></div>
-        <div class="span5"><b>{{ _('Name') }}</b></div>
-        <div class="span4"><b>{{ _('Type') }}</b></div>
-        <div class="span2 text-center"></div>
+        <div class="offset1 span5"><strong>{{ _('Name') }}</strong></div>
+        <div class="span4"><strong>{{ _('Type') }}</strong></div>
     </div>
     <div class="control-group" data-bind="foreach: scripts">
         <div class="row-fluid">
-            <div class="span1 text-center"><input type="checkbox" data-bind="checked: $data.enabled"></div>
+            <div class="span1 text-center"><input type="checkbox" data-bind="checked: $data.enabled, change: $root.saveSettings"></div>
             <div class="span5" data-bind="text: $data.name"></div>
             <div class="span4" data-bind="text: $root.typeMap[$data.type()]"></div>
             <div class="span2 text-right">

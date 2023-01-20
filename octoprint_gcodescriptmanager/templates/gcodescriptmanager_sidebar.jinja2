@@ -1,7 +1,7 @@
 <div data-bind="foreach: scripts">
     <div class="row-fluid" data-bind="visible: $data.sidebarToggle">
         <span class="span1 gcodescriptmanager-script-enable">
-            <input type="checkbox" title="{{ _('Enable Script') }}" data-bind="checked: $data.enabled">
+            <input type="checkbox" title="{{ _('Enable Script') }}" data-bind="checked: $data.enabled, change: $root.saveSettings">
         </span>
         <span class="span10 gcodescriptmanager-script-name" title="{{ _('Script Name') }}" data-bind="text: $data.name"></span>
         <span class="span1 gcodescriptmanager-script-info">
