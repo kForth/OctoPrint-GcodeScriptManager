@@ -8,13 +8,21 @@ $(function () {
     function GcodeScriptManagerViewModel(parameters) {
         var self = this;
 
+        // Injection Parameters
         self.settingsView = parameters[0];
 
-        self.consts = {};
-        self.scripts = ko.observableArray([]);
-
+        // HTML Elements
         self.editDialog = $("#dialog_gcodescriptmanager_editscript");
         self.confirmDeleteDialog = $("#dialog_gcodescriptmanager_confirmremove");
+
+        // Constants
+        self.typeOptions = [];
+        self.whenOptions = [];
+        self.typeMap = {};
+        self.whenMap = {};
+
+        // Observables
+        self.scripts = ko.observableArray([]);
         self.editIndex = ko.observable(-1);
         self.tempScript = ko.mapping.fromJS({
             name: undefined,
@@ -25,22 +33,30 @@ $(function () {
             sidebarToggle: undefined
         });
 
+        self._translateOptions = function (opts) {
+            return _.map(opts, function (e) {
+                return {value: e.value, label: gettext(e.label)};
+            });
+        };
+        self._optionsToMap = function (opts) {
+            return Object.fromEntries(
+                _.map(opts, function (e) {
+                    return [e.value, e.label];
+                })
+            );
+        };
+
         self.onBeforeBinding = function () {
             let settings = self.settingsView.settings.plugins.gcodescriptmanager;
-            self.consts = ko.mapping.toJS(settings.consts);
             self.scripts(settings.scripts());
-
-            self.typeMap = Object.fromEntries(
-                _.map(self.consts.typeOptions, function (e) {
-                    return [e.value, e.label];
-                })
+            self.typeOptions = self._translateOptions(
+                ko.mapping.toJS(settings.consts.typeOptions)
             );
-            self.whenMap = Object.fromEntries(
-                _.map(self.consts.whenOptions, function (e) {
-                    return [e.value, e.label];
-                })
+            self.whenOptions = self._translateOptions(
+                ko.mapping.toJS(settings.consts.whenOptions)
             );
-            console.log(self.typeMap);
+            self.typeMap = self._optionsToMap(self.typeOptions);
+            self.whenMap = self._optionsToMap(self.whenOptions);
         };
 
         self.saveSettings = function () {
@@ -186,8 +202,8 @@ $(function () {
 
         self.getPopoverContent = function (script) {
             return [
-                "<b>" + gettext("Type") + ":</b> " + _.startCase(script.type()),
-                "<b>" + gettext("When") + ":</b> " + _.startCase(script.when()),
+                "<b>" + gettext("Type") + ":</b> " + self.typeMap[script.type()],
+                "<b>" + gettext("When") + ":</b> " + self.whenMap[script.when()],
                 "<b>" + gettext("Script") + ":</b><pre>" + script.script() + "</pre>"
             ].join("<br>");
         };
