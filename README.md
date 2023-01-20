@@ -1,12 +1,15 @@
 # OctoPrint-GcodeScriptManager
 
-Easily manage multiple GCODE scripts.
+An OctoPrint Plugin that lets you easily manage multiple GCODE scripts.
 
-## Features:
+## Features
 
-- Multiple GCODE Scripts for each script type
-- Add scripts to the sidebar for easy access
-- Enable/Disable each script individually
+- Manage multiple scripts for each script type
+- Quickly enable or disable individual scripts from the sidebar
+
+## TODO
+
+- Fix sidebar not un-collapsing properly
 
 ## Setup
 
@@ -23,15 +26,15 @@ GCODE Script Settings:
   - Easily identifieable name for script.
 - **Type**
   - The type of GCODE script.
-    - `afterPrinterConnected`
-    - `beforePrinterDisconnected`
-    - `beforePrintStarted`
-    - `afterPrintCancelled`
-    - `afterPrintDone`
-    - `beforePrintPaused`
-    - `afterPrintResumed`
-    - `beforeToolChange`
-    - `afterToolChange`
+    - `After Printer Connected`
+    - `Before Printer Disconnected`
+    - `Before Print Started`
+    - `After Print Cancelled`
+    - `After Print Done`
+    - `Before Print Paused`
+    - `After Print Resumed`
+    - `Before Tool Change`
+    - `After Tool Change`
 - **When**
   - When to execute the script, relative to the default GCODE script of the same type.
     - `Before Default Script`
@@ -50,12 +53,15 @@ GCODE Script Settings:
 ### Sidebar Script Manager
 ![Sidebar Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/sidebar.png)
 
-### Plugin Settings Tab
-![Settings Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/settings.png)
+### Plugin Tab Tab
+![Tab Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/tab.png)
+
+### Script Edit Dialog
+![Edit Dialog Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/editdialog.png)
 
 ## License
 
-Copyright © 2022-09-27 [Kestin Goforth](https://github.com/kforth/).
+Copyright © 2023 [Kestin Goforth](https://github.com/kforth/).
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
