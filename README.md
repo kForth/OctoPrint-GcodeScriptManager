@@ -1,8 +1,14 @@
 # OctoPrint-GcodeScriptManager
 
-[![For OctoPrint](https://img.shields.io/badge/OctoPrint-white?style=flat&logo=OctoPrint)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
-[![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FkForth%2FOctoPluginStats%2Fmain%2Fdata%2Fshields%2FGcodeScriptManager%2Ftotal.json)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
-![GitHub](https://img.shields.io/github/license/kforth/OctoPrint-GcodeScriptManager?labelColor=white&color=brightgreen)
+[![For OctoPrint](https://img.shields.io/badge/OctoPrint--GcodeScriptManager-white?style=flat&logo=OctoPrint)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
+[![Active Instances](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=Active%20Instances&query=%24%5B%3F%28%40.id%3D%3D%22GcodeScriptManager%22%29%5D.stats.instances_month&url=https%3A%2F%2Fplugins.octoprint.org%2Fplugins.json&logo=OctoPrint&labelColor=white&style=flat)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
+[![New This Month](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=New%20Monthly&query=%24%5B%3F%28%40.id%3D%3D%22GcodeScriptManager%22%29%5D.stats.install_events_month&url=https%3A%2F%2Fplugins.octoprint.org%2Fplugins.json&logo=OctoPrint&labelColor=white&style=flat)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
+[![New This Week](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=New%20Weekly&query=%24%5B%3F%28%40.id%3D%3D%22GcodeScriptManager%22%29%5D.stats.install_events_week&url=https%3A%2F%2Fplugins.octoprint.org%2Fplugins.json&logo=OctoPrint&labelColor=white&style=flat)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
+
+[![GitHub Forks](https://img.shields.io/github/forks/kforth/OctoPrint-GcodeScriptManager?label=Forks&logo=GitHub&logoColor=black&labelColor=white&color=blue)](https://github.com/kForth/OctoPrint-GcodeScriptManager/network/members)
+[![GitHub Stars](https://img.shields.io/github/stars/kforth/OctoPrint-GcodeScriptManager?label=Stars&logo=GitHub&logoColor=black&labelColor=white&color=blue)](https://github.com/kForth/OctoPrint-GcodeScriptManager/stargazers)
+[![GitHub Watchers](https://img.shields.io/github/watchers/kforth/OctoPrint-GcodeScriptManager?label=Watchers&logo=GitHub&logoColor=black&labelColor=white&color=blue)](https://github.com/kForth/OctoPrint-GcodeScriptManager/watchers)
+![License](https://img.shields.io/github/license/kforth/OctoPrint-GcodeScriptManager?labelColor=white&color=blue)
 
 An OctoPrint Plugin that lets you easily manage multiple GCODE scripts.
 
