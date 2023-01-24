@@ -1,15 +1,22 @@
 # OctoPrint-GcodeScriptManager
 
+[![For OctoPrint](https://img.shields.io/badge/OctoPrint-white?style=flat&logo=OctoPrint)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
+[![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FkForth%2FOctoPluginStats%2Fmain%2Fdata%2Fshields%2FGcodeScriptManager%2Ftotal.json)](https://plugins.octoprint.org/plugins/GcodeScriptManager/)
+![GitHub](https://img.shields.io/github/license/kforth/OctoPrint-GcodeScriptManager?labelColor=white&color=brightgreen)
+
 An OctoPrint Plugin that lets you easily manage multiple GCODE scripts.
 
 ## Features
 
 - Manage multiple scripts for each script type
-- Quickly enable or disable individual scripts from the sidebar
+- Quickly enable or disable scripts from the sidebar
+- Group multiple scripts together for easier control
 
 ## TODO
 
 - Fix sidebar not un-collapsing properly
+- Fix dialog overflow
+- Better add button in edit dialog
 
 ## Setup
 
@@ -18,43 +25,13 @@ or manually using this URL:
 
     https://github.com/kforth/OctoPrint-GcodeScriptManager/archive/main.zip
 
-## Configuration
-
-GCODE Script Settings:
-
-- **Name**
-  - Easily identifieable name for script.
-- **Type**
-  - The type of GCODE script.
-    - `After Printer Connected`
-    - `Before Printer Disconnected`
-    - `Before Print Started`
-    - `After Print Cancelled`
-    - `After Print Done`
-    - `Before Print Paused`
-    - `After Print Resumed`
-    - `Before Tool Change`
-    - `After Tool Change`
-- **When**
-  - When to execute the script, relative to the default GCODE script of the same type.
-    - `Before Default Script`
-    - `After Default Script`
-- **Script**
-  - The GCODE command(s) to execute.
-- **Enabled**
-  - If `true`, the script will be executed with the default GCODE script of the same type.
-    - `true` / `false`
-- **SidebarToggle**
-  - If `true`, the script will be added to the sidebar manager.
-    - `true` / `false`
-
 ## Screenshots
 
 ### Sidebar Script Manager
 ![Sidebar Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/sidebar.png)
 
-### Plugin Tab Tab
-![Tab Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/tab.png)
+### Plugin Settings
+![Settings Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/settings.png)
 
 ### Script Edit Dialog
 ![Edit Dialog Screenshot](https://github.com/kForth/plugins.octoprint.org/raw/register/gcodescriptmanager/assets/img/plugins/gcodescriptmanager/editdialog.png)

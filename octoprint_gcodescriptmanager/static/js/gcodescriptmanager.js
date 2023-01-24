@@ -26,11 +26,10 @@ $(function () {
         self.editIndex = ko.observable(-1);
         self.tempScript = ko.mapping.fromJS({
             name: undefined,
-            type: undefined,
-            when: undefined,
-            script: undefined,
-            enabled: undefined,
-            sidebarToggle: undefined
+            description: undefined,
+            enabled: false,
+            sidebarToggle: false,
+            scripts: []
         });
 
         self._translateOptions = function (opts) {
@@ -93,11 +92,16 @@ $(function () {
         self.addScript = function () {
             let script = ko.mapping.fromJS({
                 name: self._getNewScriptName(),
-                type: "afterPrintDone",
-                when: "afterDefaultScript",
-                script: "",
+                description: gettext("A new script, not yet configured."),
                 enabled: false,
-                sidebarToggle: false
+                sidebarToggle: false,
+                scripts: [
+                    {
+                        type: "afterPrintDone",
+                        when: "afterDefaultScript",
+                        script: ""
+                    }
+                ]
             });
             self.editScript(script);
         };
@@ -129,9 +133,24 @@ $(function () {
         self.editScript = function (script) {
             self.editIndex(self.scripts().indexOf(script));
             _.forEach(_.pairs(ko.mapping.fromJS(script)), function ([k, v]) {
+                console.log(
+                    k,
+                    self.tempScript[k],
+                    typeof self.tempScript[k],
+                    v,
+                    typeof v
+                );
                 if (typeof v === "function") self.tempScript[k](v());
             });
             self.editDialog.modal("show");
+        };
+
+        self.editDialog_addSubscript = function () {
+            self.tempScript.scripts.push({
+                type: "afterPrintDone",
+                when: "afterDefaultScript",
+                script: ""
+            });
         };
 
         self.editDialog_save = function () {
@@ -171,10 +190,6 @@ $(function () {
             return !self.editDialog_isEditMode();
         });
 
-        self.editDialog_scriptWarning_empty = ko.pureComputed(function () {
-            return !self.tempScript.script();
-        });
-
         self.editDialog_nameInvalid_empty = ko.pureComputed(function () {
             return !self.tempScript.name();
         });
@@ -204,11 +219,14 @@ $(function () {
         };
 
         self.getPopoverContent = function (script) {
-            return [
-                "<b>" + gettext("Type") + ":</b> " + self.typeMap[script.type()],
-                "<b>" + gettext("When") + ":</b> " + self.whenMap[script.when()],
-                "<b>" + gettext("Script") + ":</b><pre>" + script.script() + "</pre>"
-            ].join("<br>");
+            return script.description();
+            // return _.map(script.scripts(), function (e) {
+            //     return [
+            //         "<b>" + gettext("Type") + ":</b> " + self.typeMap[e.type()],
+            //         "<b>" + gettext("When") + ":</b> " + self.whenMap[e.when()],
+            //         "<b>" + gettext("Script") + ":</b><pre>" + e.script() + "</pre>"
+            //     ].join("<br>");
+            // });
         };
     }
 

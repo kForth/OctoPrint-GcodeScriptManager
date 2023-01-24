@@ -1,12 +1,11 @@
 <div class="row-fluid">
-    <div class="offset1 span5"><strong>{{ _('Name') }}</strong></div>
-    <div class="span4"><strong>{{ _('Type') }}</strong></div>
+    <div class="span4"><strong>{{ _('Name') }}</strong></div>
+    <div class="span6"><strong>{{ _('Description') }}</strong></div>
 </div>
 <div class="control-group" data-bind="foreach: scripts">
     <div class="row-fluid">
-        <div class="span1 text-center"><input type="checkbox" data-bind="checked: $data.enabled, change: $root.saveSettings"></div>
-        <div class="span5" data-bind="text: $data.name"></div>
-        <div class="span4" data-bind="text: $root.typeMap[$data.type()]"></div>
+        <div class="span4" data-bind="text: $data.name"></div>
+        <div class="span6 text-muted" data-bind="text: $data.description"></div>
         <div class="span2 text-right">
             <div class="btn-group">
                 <button type="button" title="Move Up" class="btn btn-mini btn-grey" data-bind="click: function() { $root.moveScriptUp($data); }, enable: $root.canMoveUp($data)"><i class="fas fa-chevron-up"></i></button>

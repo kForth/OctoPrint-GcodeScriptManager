@@ -9,9 +9,8 @@
                 popover: { 
                     placement: 'right',
                     trigger: 'hover',
-                    html: true,
-                    title: function() { return $root.getPopoverTitle($data); },
-                    content: function() { return $root.getPopoverContent($data); },
+                    title: $data.name,
+                    content: $data.description,
                 }"><i class="fas fa-info-circle"></i></a>
         </span>
     </div>

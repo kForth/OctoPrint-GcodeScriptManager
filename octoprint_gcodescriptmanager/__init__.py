@@ -1,6 +1,6 @@
 import octoprint.plugin
 
-from .const import TYPE, TYPE_OPTIONS, WHEN, WHEN_OPTIONS
+from .const import DEFAULT_SCRIPTS, TYPE_OPTIONS, WHEN, WHEN_OPTIONS
 
 
 class GcodeScriptManagerPlugin(
@@ -33,24 +33,7 @@ class GcodeScriptManagerPlugin(
                 "typeOptions": TYPE_OPTIONS,
                 "whenOptions": WHEN_OPTIONS
             },
-            "scripts": [
-                {
-                    "name": "Power Off After Print",
-                    "type": TYPE.AFTER_PRINT_DONE,
-                    "when": WHEN.AFTER_DEFAULT,
-                    "script": "M81",
-                    "enabled": False,
-                    "sidebarToggle": True,
-                },
-                {
-                    "name": "Keep Chamber Warm",
-                    "type": TYPE.AFTER_PRINT_DONE,
-                    "when": WHEN.AFTER_DEFAULT,
-                    "script": "M141 S45",
-                    "enabled": False,
-                    "sidebarToggle": True,
-                }
-            ],
+            "scripts": DEFAULT_SCRIPTS,
         }
 
     def on_settings_save(self, data):

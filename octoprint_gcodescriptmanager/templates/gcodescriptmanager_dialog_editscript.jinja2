@@ -20,15 +20,9 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">{{ _('Script Type') }}</label>
+                <label class="control-label">{{ _('Description') }}</label>
                 <div class="controls">
-                    <select data-bind="value: $root.tempScript.type, options: $root.typeOptions, optionsText: 'label', optionsValue: 'value'"></select>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">{{ _('Script Timing') }}</label>
-                <div class="controls">
-                    <select data-bind="value: $root.tempScript.when, options: $root.whenOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                    <textarea rows="2" class="block" data-bind="value: $root.tempScript.description"></textarea>
                 </div>
             </div>
             <div class="control-group">
@@ -43,13 +37,25 @@
                     <input type="checkbox" data-bind="checked: $root.tempScript.sidebarToggle">
                 </div>
             </div>
-            <div class="control-group" data-bind="css: {warning: $root.editDialog_scriptWarning_empty()}">
-                <label class="control-label">{{ _('Script') }}</label>
-                <div class="controls">
-                    <textarea rows="4" class="block monospace" data-bind="value: $root.tempScript.script"></textarea>
-                    <span class="help-block" data-bind="visible: $root.editDialog_scriptWarning_empty()">{{ _('Script shouldn\'t be empty') }}</span>
+            <div data-bind="foreach: $root.tempScript.scripts">
+                <hr>
+                <div class="control-group">
+                    <label class="control-label">{{ _('Script Type') }}</label>
+                    <div class="controls">
+                        <select data-bind="value: $data.type, options: $root.typeOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                    </div>
+                    <label class="control-label">{{ _('Script Timing') }}</label>
+                    <div class="controls">
+                        <select data-bind="value: $data.when, options: $root.whenOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                    </div>
+                    <label class="control-label">{{ _('Script') }}</label>
+                    <div class="controls">
+                        <textarea rows="4" class="block monospace" data-bind="value: $data.script"></textarea>
+                    </div>
                 </div>
             </div>
+            <hr>
+            <button type="button" title="Add Script" class="btn btn-success span2" data-bind="click: function() { $root.editDialog_addSubscript(); }"><i class="fas fa-plus"></i></button>
         </form>
     </div>
     <div class="modal-footer">

@@ -1,22 +1,6 @@
-#settings_plugin_gcodescriptmanager, #tab_plugin_gcodescriptmanager {
-  table {
-    tbody, thead {
-      tr {
-        th, td {
-          white-space: nowrap;
-          
-          &.min-content {
-            width: min-content;
-          }
-          &.max-content {
-            width: max-content;
-          }
-        }
-      }
-    }
-  }
-
+#dialog_gcodescriptmanager_editscript {
   textarea {
+    min-height: 2.2em;
     resize: vertical;
   }
 }
@@ -26,14 +10,20 @@
     overflow: visible;
   }
 
-  .gcodescriptmanager-script-enable {
-    text-align: left;
+  .gcodescriptmanager-script {
+    &-enable {
+      text-align: left;
+    }
+    &-name {
+      margin: 3px 0 3px 5px;
+    }
+    &-info {
+      margin: 3px 0 3px 5px;
+      text-align: right;
+    }
   }
-  .gcodescriptmanager-script-name {
-    margin: 3px 0 3px 5px;
-  }
-  .gcodescriptmanager-script-info {
-    margin: 3px 0 3px 5px;
-    text-align: right;
+  
+  .popover-title {
+    font-weight: bold;
   }
 }

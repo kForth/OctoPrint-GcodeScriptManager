@@ -64,3 +64,74 @@ WHEN_OPTIONS = [
         'value': WHEN.BEFORE_DEFAULT,
     },
 ]
+
+DEFAULT_SCRIPTS = [
+    {
+        "name": "Power Off After Print",
+        "description": "Send 'M81' after the print finishes or fails.",
+        "scripts": [{
+            "type": TYPE.AFTER_PRINT_DONE,
+            "when": WHEN.AFTER_DEFAULT,
+            "script": "M81",
+        }],
+        "sidebarToggle": True,
+        "enabled": False,
+    },
+    {
+        "name": "Park On Pause",
+        "description": "Park and unpark the print head when pausing.",
+        "scripts": [
+            {
+                "type": TYPE.BEFORE_PRINT_PAUSED,
+                "when": WHEN.AFTER_DEFAULT,
+                "script": """{% if pause_position.x is not none %}
+; relative XYZE
+G91
+M83
+
+; retract filament, move Z slightly upwards
+G1 Z+5 E-5 F4500
+
+; absolute XYZE
+M82
+G90
+
+; move to a safe rest position, adjust as necessary
+G1 X0 Y0
+{% endif %}
+""",
+            },
+            {
+                "type": TYPE.AFTER_PRINT_RESUMED,
+                "when": WHEN.BEFORE_DEFAULT,
+                "script": """{% if pause_position.x is not none %}
+; relative extruder
+M83
+
+; prime nozzle
+G1 E-5 F4500
+G1 E5 F4500
+G1 E5 F4500
+
+; absolute E
+M82
+
+; absolute XYZ
+G90
+
+; reset E
+G92 E{{ pause_position.e }}
+
+; move back to pause position XYZ
+G1 X{{ pause_position.x }} Y{{ pause_position.y }} Z{{ pause_position.z }} F4500
+
+; reset to feed rate before pause if available
+{% if pause_position.f is not none %}G1 F{{ pause_position.f }}{% endif %}
+{% endif %}
+""",
+            }
+        ],
+        "enabled": True,
+        "sidebarToggle": False,
+    }
+]
