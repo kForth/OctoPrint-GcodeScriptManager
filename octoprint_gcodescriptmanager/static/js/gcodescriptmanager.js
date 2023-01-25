@@ -58,16 +58,6 @@ $(function () {
             self.whenMap = self._optionsToMap(self.whenOptions);
         };
 
-        self.saveSettings = function () {
-            OctoPrint.settings.save({
-                plugins: {
-                    gcodescriptmanager: {
-                        scripts: ko.mapping.toJS(self.scripts)
-                    }
-                }
-            });
-        };
-
         self._getNewScriptName = function (base) {
             let i = 0;
             if (base) {
@@ -161,7 +151,6 @@ $(function () {
                     self.scripts()[self.editIndex()][k](v);
                 });
             }
-            self.saveSettings();
             self.editDialog.modal("hide");
         };
 
@@ -171,7 +160,6 @@ $(function () {
 
         self.editDialog_remove = function () {
             self.scripts.splice(self.editIndex(), 1);
-            self.saveSettings();
             self.confirmDeleteDialog.modal("hide");
             self.editDialog.modal("hide");
         };

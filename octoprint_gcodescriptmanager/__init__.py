@@ -75,13 +75,6 @@ class GcodeScriptManagerPlugin(
                 "custom_bindings": True,
                 "icon": "fas fa-scroll",
             },
-            {
-                "type": "tab",
-                "name": "GCODE Scripts",
-                "template": "gcodescriptmanager_tab.jinja2",
-                "custom_bindings": True,
-                "icon": "fas fa-scroll",
-            },
         ]
 
     ##~~ StartupPlugin mixin
