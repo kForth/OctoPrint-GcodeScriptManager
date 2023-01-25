@@ -46,16 +46,20 @@ $(function () {
         };
 
         self.onBeforeBinding = function () {
-            let settings = self.settingsView.settings.plugins.gcodescriptmanager;
-            self.scripts(settings.scripts());
+            self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
             self.typeOptions = self._translateOptions(
-                ko.mapping.toJS(settings.consts.typeOptions)
+                ko.mapping.toJS(self._settings.consts.typeOptions)
             );
             self.whenOptions = self._translateOptions(
-                ko.mapping.toJS(settings.consts.whenOptions)
+                ko.mapping.toJS(self._settings.consts.whenOptions)
             );
             self.typeMap = self._optionsToMap(self.typeOptions);
             self.whenMap = self._optionsToMap(self.whenOptions);
+            self.scripts(self._settings.scripts());
+        };
+
+        self.onSettingsShown = function () {
+            self.scripts(self._settings.scripts());
         };
 
         self._getNewScriptName = function (base) {
