@@ -15,6 +15,28 @@ class WHEN:
     BEFORE_DEFAULT = "beforeDefaultScript"
 
 
+class ON_CONNECT:
+    UNCHANGED = "unchanged"
+    ENABLED = "enabled"
+    DISABLED = "disabled"
+
+
+ON_CONNECT_OPTIONS = [
+    {
+        'label': 'Unchanged',
+        'value': ON_CONNECT.UNCHANGED,
+    },
+    {
+        'label': 'Enable Script',
+        'value': ON_CONNECT.ENABLED,
+    },
+    {
+        'label': 'Disable Script',
+        'value': ON_CONNECT.DISABLED,
+    },
+]
+
+
 TYPE_OPTIONS = [
     {
         'label': 'After Printer Connected',
@@ -71,6 +93,8 @@ DEFAULT_SCRIPTS = [
         "description": "Send 'M81' after the print finishes or fails.",
         "sidebarToggle": True,
         "enabled": False,
+        "onConnect": ON_CONNECT.UNCHANGED,
+        "autoDisable": True,
         "scripts": [{
             "type": TYPE.AFTER_PRINT_DONE,
             "when": WHEN.AFTER_DEFAULT,
@@ -82,6 +106,8 @@ DEFAULT_SCRIPTS = [
         "description": "Park and unpark the print head when pausing.",
         "enabled": True,
         "sidebarToggle": False,
+        "onConnect": ON_CONNECT.UNCHANGED,
+        "autoDisable": False,
         "scripts": [
             {
                 "type": TYPE.BEFORE_PRINT_PAUSED,

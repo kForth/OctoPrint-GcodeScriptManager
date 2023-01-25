@@ -16,6 +16,7 @@ $(function () {
         self.confirmDeleteDialog = $("#dialog_gcodescriptmanager_confirmremove");
 
         // Constants
+        self.onConnectOptions = [];
         self.typeOptions = [];
         self.whenOptions = [];
         self.typeMap = {};
@@ -29,6 +30,8 @@ $(function () {
             description: undefined,
             enabled: false,
             sidebarToggle: false,
+            onConnect: "unchanged",
+            autoDisable: false,
             scripts: []
         });
 
@@ -42,21 +45,36 @@ $(function () {
             });
         };
 
+        self.readSettings = function (read_consts) {
+            let settings = self.settingsView.settings.plugins.gcodescriptmanager;
+            self.scripts(settings.scripts());
+            if (read_consts) {
+                self.onConnectOptions = self._translateOptions(
+                    ko.mapping.toJS(settings.consts.onConnectOptions)
+                );
+                self.typeOptions = self._translateOptions(
+                    ko.mapping.toJS(settings.consts.typeOptions)
+                );
+                self.whenOptions = self._translateOptions(
+                    ko.mapping.toJS(settings.consts.whenOptions)
+                );
+                self.typeMap = self._optionsToMap(self.typeOptions);
+                self.whenMap = self._optionsToMap(self.whenOptions);
+            }
+        };
+
         self.onBeforeBinding = function () {
-            self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
-            self.typeOptions = self._translateOptions(
-                ko.mapping.toJS(self._settings.consts.typeOptions)
-            );
-            self.whenOptions = self._translateOptions(
-                ko.mapping.toJS(self._settings.consts.whenOptions)
-            );
-            self.typeMap = self._optionsToMap(self.typeOptions);
-            self.whenMap = self._optionsToMap(self.whenOptions);
-            self.scripts(self._settings.scripts());
+            self.readSettings(true);
         };
 
         self.onSettingsShown = function () {
-            self.scripts(self._settings.scripts());
+            self.readSettings();
+        };
+
+        self.onDataUpdaterPluginMessage = function (plugin, data) {
+            if (plugin !== "gcodescriptmanager") return;
+            if (data && data.settings && data.settings.scripts)
+                self.scripts(ko.mapping.fromJS(data.settings.scripts)());
         };
 
         self._translateOptions = function (opts) {
@@ -100,6 +118,8 @@ $(function () {
                 description: gettext("A new script, not yet configured."),
                 enabled: false,
                 sidebarToggle: false,
+                onConnect: "unchanged",
+                autoDisable: false,
                 scripts: [
                     {
                         type: "afterPrintDone",
@@ -139,8 +159,6 @@ $(function () {
                 if (typeof v === "function") self.tempScript[k](v());
             });
             self.editDialog.modal("show");
-
-            console.log(self.tempScript, self.tempScript.scripts);
         };
 
         // Edit Dialog

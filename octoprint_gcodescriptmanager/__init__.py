@@ -1,6 +1,13 @@
 import octoprint.plugin
 
-from .const import DEFAULT_SCRIPTS, TYPE_OPTIONS, WHEN, WHEN_OPTIONS
+from .const import (
+    DEFAULT_SCRIPTS,
+    ON_CONNECT,
+    ON_CONNECT_OPTIONS,
+    TYPE_OPTIONS,
+    WHEN,
+    WHEN_OPTIONS,
+)
 
 
 class GcodeScriptManagerPlugin(
@@ -30,6 +37,7 @@ class GcodeScriptManagerPlugin(
     def get_settings_defaults(self):
         return {
             "consts": {
+                "onConnectOptions": ON_CONNECT_OPTIONS,
                 "typeOptions": TYPE_OPTIONS,
                 "whenOptions": WHEN_OPTIONS
             },
@@ -43,15 +51,15 @@ class GcodeScriptManagerPlugin(
     def read_settings(self):
         self._scripts = self._settings.get(["scripts"])
 
-    def write_settings(self):
+    def write_settings(self, notify=True):
         self._settings.set(["scripts"], self._scripts)
         self._settings.save()
+        if notify:
+            self._update_client_settings()
 
     ##~~ AssetPlugin mixin
 
     def get_assets(self):
-        # Define your plugin's asset files to automatically include in the
-        # core UI here.
         return {
             "js": ["js/gcodescriptmanager.js"],
             "css": ["css/gcodescriptmanager.css"],
@@ -110,12 +118,23 @@ class GcodeScriptManagerPlugin(
 
         return prefix, suffix, {}
 
+    ##~~ HandleConnect Hook
+
+    def handle_connect_hook(self, *args, **kwargs):
+        self._logger.warn("Handling Connect Event")
+        if any([e['onConnect'] != ON_CONNECT.UNCHANGED for e in self._scripts]):
+            for script in self._scripts:
+                if script["onConnect"] == ON_CONNECT.ENABLED:
+                    self._logger.warn("Enabling")
+                    script["enabled"] = True
+                elif script["onConnect"] == ON_CONNECT.DISABLED:
+                    self._logger.warn("Disabling")
+                    script["enabled"] = False
+            self.write_settings()
+
     ##~~ Softwareupdate hook
 
     def get_update_information(self):
-        # Define the configuration for your plugin to use with the Software Update
-        # Plugin here. See https://docs.octoprint.org/en/master/bundledplugins/softwareupdate.html
-        # for details.
         return {
             "gcodescriptmanager": {
                 "displayName": "GCODE Script Manager",
@@ -144,4 +163,5 @@ def __plugin_load__():
     __plugin_hooks__ = {
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
         "octoprint.comm.protocol.scripts": __plugin_implementation__.gcode_script_hook,
+        "octoprint.printer.handle_connect": __plugin_implementation__.handle_connect_hook,
     }
