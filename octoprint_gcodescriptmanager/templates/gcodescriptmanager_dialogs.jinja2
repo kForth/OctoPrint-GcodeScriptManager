@@ -18,23 +18,17 @@
                         <span class="help-block" data-bind="visible: $root.editDialog_nameInvalid_duplicate()">{{ _('Name must be unique') }}</span>
                     </span>
                 </div>
-            </div>
-            <div class="control-group">
                 <label class="control-label">{{ _('Description') }}</label>
                 <div class="controls">
                     <textarea rows="2" class="block" data-bind="value: $root.tempScript.description"></textarea>
                 </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">{{ _('Enable Script') }}</label>
                 <div class="controls">
-                    <input type="checkbox" data-bind="checked: $root.tempScript.enabled">
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">{{ _('Show in Sidebar') }}</label>
-                <div class="controls">
-                    <input type="checkbox" data-bind="checked: $root.tempScript.sidebarToggle">
+                    <label class="checkbox">
+                        <input type="checkbox" data-bind="checked: $root.tempScript.enabled"> {{ _('Enable Script') }}
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" data-bind="checked: $root.tempScript.sidebarToggle"> {{ _('Show in Sidebar') }}
+                    </label>
                 </div>
             </div>
             <div data-bind="foreach: $root.tempScript.scripts">
@@ -52,19 +46,20 @@
                     <div class="controls">
                         <textarea rows="4" class="block monospace" data-bind="value: $data.script"></textarea>
                     </div>
-                    <div class="controls">
+                    <div class="controls text-right">
+                        <button type="button" title="Delete Subscript" class="btn btn-mini btn-danger" data-bind="click: function() { $root.editDialog_removeSubscript($index()); }"><i class="fas fa-trash"></i></button>
                         <div class="btn-group">
                             <button type="button" title="Move Up" class="btn btn-mini btn-grey" data-bind="click: function() { $root.editDialog_moveUp($index()); }, enable: $root.editDialog_canMoveUp($index())"><i class="fas fa-chevron-up"></i></button>
                             <button type="button" title="Move Down" class="btn btn-mini btn-grey" data-bind="click: function() { $root.editDialog_moveDown($index()); }, enable: $root.editDialog_canMoveDown($index())"><i class="fas fa-chevron-down"></i></button>
                         </div>
-                        <button type="button" title="Delete Subscript" class="btn btn-mini btn-danger" data-bind="click: function() { $root.editDialog_removeSubscript($index()); }"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             </div>
-            <hr>
-            <button type="button" title="Add Script" class="btn btn-success span2" data-bind="click: function() { $root.editDialog_addSubscript(); }">
-                <i class="fas fa-plus"></i> {{ _('Add Script') }}
-            </button>
+            <div class="control-group text-right">
+                <button type="button" title="Add Script" class="btn btn-success btn-small" data-bind="click: function() { $root.editDialog_addSubscript(); }">
+                    <i class="fas fa-plus"></i> {{ _('Add Subscript') }}
+                </button>
+            </div>
         </form>
     </div>
     <div class="modal-footer">

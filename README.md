@@ -20,12 +20,8 @@ An OctoPrint Plugin that lets you easily manage multiple GCODE scripts.
 
 ## TODO
 
-- Fix sidebar not un-collapsing properly
-- Fix dialog overflow
-- Better add button in edit dialog
-- Advanced Options?
-  - Single trigger / disable after trigger?
-  - Default State on Connect
+- Fix sidebar not expanding nicely
+- Handle modal overflow better?
 
 ## Setup
 

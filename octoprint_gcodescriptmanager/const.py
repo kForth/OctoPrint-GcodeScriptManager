@@ -69,17 +69,19 @@ DEFAULT_SCRIPTS = [
     {
         "name": "Power Off After Print",
         "description": "Send 'M81' after the print finishes or fails.",
+        "sidebarToggle": True,
+        "enabled": False,
         "scripts": [{
             "type": TYPE.AFTER_PRINT_DONE,
             "when": WHEN.AFTER_DEFAULT,
             "script": "M81",
         }],
-        "sidebarToggle": True,
-        "enabled": False,
     },
     {
         "name": "Park On Pause",
         "description": "Park and unpark the print head when pausing.",
+        "enabled": True,
+        "sidebarToggle": False,
         "scripts": [
             {
                 "type": TYPE.BEFORE_PRINT_PAUSED,
@@ -131,7 +133,5 @@ G1 X{{ pause_position.x }} Y{{ pause_position.y }} Z{{ pause_position.z }} F4500
 """,
             }
         ],
-        "enabled": True,
-        "sidebarToggle": False,
     }
 ]
