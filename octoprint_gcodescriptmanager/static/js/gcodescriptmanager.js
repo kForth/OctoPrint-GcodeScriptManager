@@ -32,19 +32,6 @@ $(function () {
             scripts: []
         });
 
-        self._translateOptions = function (opts) {
-            return _.map(opts, function (e) {
-                return {value: e.value, label: gettext(e.label)};
-            });
-        };
-        self._optionsToMap = function (opts) {
-            return Object.fromEntries(
-                _.map(opts, function (e) {
-                    return [e.value, e.label];
-                })
-            );
-        };
-
         self.onBeforeBinding = function () {
             self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
             self.typeOptions = self._translateOptions(
@@ -60,6 +47,19 @@ $(function () {
 
         self.onSettingsShown = function () {
             self.scripts(self._settings.scripts());
+        };
+
+        self._translateOptions = function (opts) {
+            return _.map(opts, function (e) {
+                return {value: e.value, label: gettext(e.label)};
+            });
+        };
+        self._optionsToMap = function (opts) {
+            return Object.fromEntries(
+                _.map(opts, function (e) {
+                    return [e.value, e.label];
+                })
+            );
         };
 
         self._getNewScriptName = function (base) {
@@ -83,6 +83,7 @@ $(function () {
             return name;
         };
 
+        // Script List
         self.addScript = function () {
             let script = ko.mapping.fromJS({
                 name: self._getNewScriptName(),
@@ -100,26 +101,24 @@ $(function () {
             self.editScript(script);
         };
 
-        self.canMoveUp = function (script) {
-            let index = self.scripts().indexOf(script);
+        self.canMoveUp = function (index) {
             return index > 0;
         };
 
-        self.canMoveDown = function (script) {
-            let index = self.scripts().indexOf(script);
+        self.canMoveDown = function (index) {
             return index < self.scripts().length - 1;
         };
 
-        self.moveScriptUp = function (script) {
-            if (self.canMoveUp(script)) self._moveScript(script, -1);
+        self.moveScriptUp = function (index) {
+            if (self.canMoveUp(index)) self._moveScript(index, -1);
         };
 
-        self.moveScriptDown = function (script) {
-            if (self.canMoveDown(script)) self._moveScript(script, 1);
+        self.moveScriptDown = function (index) {
+            if (self.canMoveDown(index)) self._moveScript(index, 1);
         };
 
-        self._moveScript = function (script, distance) {
-            let index = self.scripts().indexOf(script);
+        self._moveScript = function (index, distance) {
+            let script = self.scripts()[index];
             self.scripts.splice(index, 1);
             self.scripts.splice(index + distance, 0, script);
         };
@@ -127,18 +126,14 @@ $(function () {
         self.editScript = function (script) {
             self.editIndex(self.scripts().indexOf(script));
             _.forEach(_.pairs(ko.mapping.fromJS(script)), function ([k, v]) {
-                console.log(
-                    k,
-                    self.tempScript[k],
-                    typeof self.tempScript[k],
-                    v,
-                    typeof v
-                );
                 if (typeof v === "function") self.tempScript[k](v());
             });
             self.editDialog.modal("show");
+
+            console.log(self.tempScript, self.tempScript.scripts);
         };
 
+        // Edit Dialog
         self.editDialog_addSubscript = function () {
             self.tempScript.scripts.push({
                 type: "afterPrintDone",
@@ -174,6 +169,33 @@ $(function () {
             self.editScript(script);
         };
 
+        self.editDialog_canMoveUp = function (index) {
+            return index > 0;
+        };
+
+        self.editDialog_canMoveDown = function (index) {
+            return index < self.tempScript.scripts().length - 1;
+        };
+
+        self.editDialog_moveUp = function (index) {
+            if (self.editDialog_canMoveUp(index)) self._moveSubscript(index, -1);
+        };
+
+        self.editDialog_moveDown = function (index) {
+            if (self.editDialog_canMoveDown(index)) self._moveSubscript(index, 1);
+        };
+
+        self._moveSubscript = function (index, distance) {
+            let subscript = self.tempScript.scripts()[index];
+            self.tempScript.scripts.splice(index, 1);
+            self.tempScript.scripts.splice(index + distance, 0, subscript);
+        };
+
+        self.editDialog_removeSubscript = function (index) {
+            self.tempScript.scripts.splice(index, 1);
+        };
+
+        // Form Verification
         self.editDialog_isEditMode = ko.pureComputed(function () {
             return self.editIndex() >= 0;
         });
@@ -205,21 +227,6 @@ $(function () {
         self.editDialog_formInvalid = ko.pureComputed(function () {
             return self.editDialog_nameInvalid();
         });
-
-        self.getPopoverTitle = function (script) {
-            return "<b>" + script.name() + "</b>";
-        };
-
-        self.getPopoverContent = function (script) {
-            return script.description();
-            // return _.map(script.scripts(), function (e) {
-            //     return [
-            //         "<b>" + gettext("Type") + ":</b> " + self.typeMap[e.type()],
-            //         "<b>" + gettext("When") + ":</b> " + self.whenMap[e.when()],
-            //         "<b>" + gettext("Script") + ":</b><pre>" + e.script() + "</pre>"
-            //     ].join("<br>");
-            // });
-        };
     }
 
     OCTOPRINT_VIEWMODELS.push({

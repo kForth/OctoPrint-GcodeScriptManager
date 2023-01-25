@@ -12,7 +12,7 @@
             <div class="control-group" data-bind="css: {error: $root.editDialog_nameInvalid()}">
                 <label class="control-label">{{ _('Name') }}</label>
                 <div class="controls">
-                    <input type="text" data-bind="value: $root.tempScript.name">
+                    <input class="input-block-level" type="text" data-bind="value: $root.tempScript.name">
                     <span data-bind="visible: $root.editDialog_nameInvalid()">
                         <span class="help-block" data-bind="visible: $root.editDialog_nameInvalid_empty()">{{ _('Name must be set') }}</span>
                         <span class="help-block" data-bind="visible: $root.editDialog_nameInvalid_duplicate()">{{ _('Name must be unique') }}</span>
@@ -42,20 +42,29 @@
                 <div class="control-group">
                     <label class="control-label">{{ _('Script Type') }}</label>
                     <div class="controls">
-                        <select data-bind="value: $data.type, options: $root.typeOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                        <select class="input-block-level" data-bind="value: $data.type, options: $root.typeOptions, optionsText: 'label', optionsValue: 'value'"></select>
                     </div>
                     <label class="control-label">{{ _('Script Timing') }}</label>
                     <div class="controls">
-                        <select data-bind="value: $data.when, options: $root.whenOptions, optionsText: 'label', optionsValue: 'value'"></select>
+                        <select class="input-block-level" data-bind="value: $data.when, options: $root.whenOptions, optionsText: 'label', optionsValue: 'value'"></select>
                     </div>
                     <label class="control-label">{{ _('Script') }}</label>
                     <div class="controls">
                         <textarea rows="4" class="block monospace" data-bind="value: $data.script"></textarea>
                     </div>
+                    <div class="controls">
+                        <div class="btn-group">
+                            <button type="button" title="Move Up" class="btn btn-mini btn-grey" data-bind="click: function() { $root.editDialog_moveUp($index()); }, enable: $root.editDialog_canMoveUp($index())"><i class="fas fa-chevron-up"></i></button>
+                            <button type="button" title="Move Down" class="btn btn-mini btn-grey" data-bind="click: function() { $root.editDialog_moveDown($index()); }, enable: $root.editDialog_canMoveDown($index())"><i class="fas fa-chevron-down"></i></button>
+                        </div>
+                        <button type="button" title="Delete Subscript" class="btn btn-mini btn-danger" data-bind="click: function() { $root.editDialog_removeSubscript($index()); }"><i class="fas fa-trash"></i></button>
+                    </div>
                 </div>
             </div>
             <hr>
-            <button type="button" title="Add Script" class="btn btn-success span2" data-bind="click: function() { $root.editDialog_addSubscript(); }"><i class="fas fa-plus"></i></button>
+            <button type="button" title="Add Script" class="btn btn-success span2" data-bind="click: function() { $root.editDialog_addSubscript(); }">
+                <i class="fas fa-plus"></i> {{ _('Add Script') }}
+            </button>
         </form>
     </div>
     <div class="modal-footer">
