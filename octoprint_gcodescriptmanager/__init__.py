@@ -89,16 +89,24 @@ class GcodeScriptManagerPlugin(
         if not script_type == "gcode":
             return None
 
+        should_save = False
         prefix, suffix = "", ""
         for script in self._scripts:
-            if script["type"] == script_name and script["enabled"]:
-                self._logger.info(
-                    "Adding Gcode Script '%(name)s' on '%(type)s', '%(when)s'", script
-                )
-                if script["when"] == WHEN.BEFORE_DEFAULT:
-                    prefix += "\n" + script["script"]
-                else:
-                    suffix += "\n" + script["script"]
+            for subscript in script["scripts"]:
+                if subscript["type"] == script_name and script["enabled"]:
+                    self._logger.info(
+                        "Adding Gcode Script '%(name)s' on '%(type)s', '%(when)s'", script
+                    )
+                    if subscript["when"] == WHEN.BEFORE_DEFAULT:
+                        prefix += "\n" + subscript["script"]
+                    else:
+                        suffix += "\n" + subscript["script"]
+                    if script["autoDisable"]:
+                        script["enabled"] = False
+                        should_save = True
+
+        if should_save:
+            self.write_settings()
 
         return prefix, suffix, {}
 
