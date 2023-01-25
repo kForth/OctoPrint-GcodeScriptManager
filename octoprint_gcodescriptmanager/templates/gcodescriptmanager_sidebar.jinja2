@@ -1,9 +1,9 @@
 <div data-bind="foreach: scripts">
     <div class="row-fluid">
         <span class="span1 gcodescriptmanager-script-enable">
-            <input type="checkbox" title="{{ _('Enable Script') }}" data-bind="checked: $data.enabled, change: $root.saveSettings">
+            <input type="checkbox" title="{{ _('Enabled') }}" data-bind="checked: $data.enabled, event: { change: $root.saveSettings }">
         </span>
-        <span class="span10 gcodescriptmanager-script-name" title="{{ _('Script Name') }}" data-bind="text: $data.name"></span>
+        <span class="span10 gcodescriptmanager-script-name" data-bind="text: $data.name"></span>
         <span class="span1 gcodescriptmanager-script-info">
             <a class="text-info" href="javascript:void(0)" data-bind="
                 popover: { 

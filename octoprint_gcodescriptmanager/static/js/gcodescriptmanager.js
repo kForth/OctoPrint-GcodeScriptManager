@@ -32,6 +32,16 @@ $(function () {
             scripts: []
         });
 
+        self.saveSettings = function () {
+            OctoPrint.settings.save({
+                plugins: {
+                    gcodescriptmanager: {
+                        scripts: ko.mapping.toJS(self.scripts)
+                    }
+                }
+            });
+        };
+
         self.onBeforeBinding = function () {
             self._settings = self.settingsView.settings.plugins.gcodescriptmanager;
             self.typeOptions = self._translateOptions(
