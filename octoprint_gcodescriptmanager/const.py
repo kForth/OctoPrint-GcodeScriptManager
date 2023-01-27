@@ -4,8 +4,8 @@ class TYPE:
     BEFORE_PRINT_STARTED = "beforePrintStarted"
     AFTER_PRINT_CANCELLED = "afterPrintCancelled"
     AFTER_PRINT_DONE = "afterPrintDone"
-    BEFORE_PRINT_PAUSED = "beforePrintPaused"
-    AFTER_PRINT_RESUMED = "afterPrintResumed"
+    AFTER_PRINT_PAUSED = "afterPrintPaused"
+    BEFORE_PRINT_RESUMED = "beforePrintResumed"
     BEFORE_TOOL_CHANGE = "beforeToolChange"
     AFTER_TOOL_CHANGE = "afterToolChange"
 
@@ -60,11 +60,11 @@ TYPE_OPTIONS = [
     },
     {
         'label': 'Before Print Paused',
-        'value': TYPE.BEFORE_PRINT_PAUSED,
+        'value': TYPE.AFTER_PRINT_PAUSED,
     },
     {
         'label': 'After Print Resumed',
-        'value': TYPE.AFTER_PRINT_RESUMED,
+        'value': TYPE.BEFORE_PRINT_RESUMED,
     },
     {
         'label': 'Before Tool Change',
@@ -110,7 +110,7 @@ DEFAULT_SCRIPTS = [
         "autoDisable": False,
         "scripts": [
             {
-                "type": TYPE.BEFORE_PRINT_PAUSED,
+                "type": TYPE.AFTER_PRINT_PAUSED,
                 "when": WHEN.AFTER_DEFAULT,
                 "script": """{% if pause_position.x is not none %}
 ; relative XYZE
@@ -130,7 +130,7 @@ G1 X0 Y0
 """,
             },
             {
-                "type": TYPE.AFTER_PRINT_RESUMED,
+                "type": TYPE.BEFORE_PRINT_RESUMED,
                 "when": WHEN.BEFORE_DEFAULT,
                 "script": """{% if pause_position.x is not none %}
 ; relative extruder
