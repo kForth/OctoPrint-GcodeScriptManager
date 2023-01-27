@@ -1,9 +1,11 @@
 import octoprint.plugin
+from jinja2 import BaseLoader, Environment
 
 from .const import (
     DEFAULT_SCRIPTS,
     ON_CONNECT,
     ON_CONNECT_OPTIONS,
+    TYPE,
     TYPE_OPTIONS,
     WHEN,
     WHEN_OPTIONS,
@@ -21,6 +23,7 @@ class GcodeScriptManagerPlugin(
 
         defaults = self.get_settings_defaults()
         self._scripts = defaults["scripts"]
+        self._update_settings()
 
     def _update_client_settings(self):
         self._plugin_manager.send_plugin_message(
@@ -50,6 +53,13 @@ class GcodeScriptManagerPlugin(
 
     def read_settings(self):
         self._scripts = self._settings.get(["scripts"])
+        self._update_settings()
+
+    def _update_settings(self):
+        self._enabled_script_types = set(sum(
+            [[ss["type"] for ss in s["scripts"]] for s in self._scripts],
+            start=[]
+        ))
 
     def write_settings(self, notify=True):
         self._settings.set(["scripts"], self._scripts)
@@ -96,19 +106,57 @@ class GcodeScriptManagerPlugin(
     def gcode_script_hook(self, comm, script_type, script_name, *args, **kwargs):
         if not script_type == "gcode":
             return None
+        if script_name not in self._enabled_script_types:
+            return None
 
         should_save = False
         prefix, suffix = "", ""
+        context = {
+            "printer_profile": comm._printerProfileManager.get_current_or_default(),
+            "last_position": comm.last_position,
+            "last_temperature": comm.last_temperature.as_script_dict(),
+            "last_fanspeed": comm.last_fanspeed,
+        }
+
+        if script_name in (TYPE.AFTER_PRINT_PAUSED, TYPE.BEFORE_PRINT_RESUMED):
+            context.update(
+                {
+                    "pause_position": comm.pause_position,
+                    "pause_temperature": comm.pause_temperature.as_script_dict(),
+                    "pause_fanspeed": comm.pause_fanspeed,
+                }
+            )
+        elif script_name == TYPE.AFTER_PRINT_CANCELLED:
+            context.update(
+                {
+                    "cancel_position": comm.cancel_position,
+                    "cancel_temperature": comm.cancel_temperature.as_script_dict(),
+                    "cancel_fanspeed": comm.cancel_fanspeed,
+                }
+            )
+
+        loader = BaseLoader()
         for script in self._scripts:
-            for subscript in script["scripts"]:
-                if subscript["type"] == script_name and script["enabled"]:
+            if not script["enabled"]:
+                continue
+            for _script in script["scripts"]:
+                if _script["type"] == script_name:
                     self._logger.info(
-                        "Adding Gcode Script '%(name)s' on '%(type)s', '%(when)s'", script
+                        "Adding Gcode Script '%(name)s' on '%(type)s', '%(when)s'",
+                        {
+                            "name": script["name"],
+                            "type": _script["type"],
+                            "when": _script["when"],
+                        }
                     )
-                    if subscript["when"] == WHEN.BEFORE_DEFAULT:
-                        prefix += "\n" + subscript["script"]
+                    template = Environment(loader=loader).from_string(_script["script"])
+                    rendered = template.render(**context)
+
+                    if _script["when"] == WHEN.BEFORE_DEFAULT:
+                        prefix += "\n" + rendered
                     else:
-                        suffix += "\n" + subscript["script"]
+                        suffix += "\n" + rendered
+
                     if script["autoDisable"]:
                         script["enabled"] = False
                         should_save = True
