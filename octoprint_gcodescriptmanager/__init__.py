@@ -121,14 +121,19 @@ class GcodeScriptManagerPlugin(
     ##~~ HandleConnect Hook
 
     def handle_connect_hook(self, *args, **kwargs):
-        self._logger.warn("Handling Connect Event")
         if any([e['onConnect'] != ON_CONNECT.UNCHANGED for e in self._scripts]):
             for script in self._scripts:
                 if script["onConnect"] == ON_CONNECT.ENABLED:
-                    self._logger.warn("Enabling")
+                    self._logger.info(
+                        "Enabling Script on Connect: '%(name)s'",
+                        {"name": script["name"]}
+                    )
                     script["enabled"] = True
                 elif script["onConnect"] == ON_CONNECT.DISABLED:
-                    self._logger.warn("Disabling")
+                    self._logger.info(
+                        "Disabling Script on Connect: '%(name)s'",
+                        {"name": script["name"]}
+                    )
                     script["enabled"] = False
             self.write_settings()
 
